@@ -241,11 +241,7 @@ module.exports = {
           console.log("err :>> ", err, query);
           itemNotFound(err, item, reject, "DATA_DOES_NOT_EXIST");
         }
-        if (item !== null) {
-          resolve(item);
-        } else {
-          itemNotFound("", item, reject, "DATA_DOES_NOT_EXIST");
-        }
+        resolve(item);
 
       });
     });
