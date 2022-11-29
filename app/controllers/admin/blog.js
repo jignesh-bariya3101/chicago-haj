@@ -180,7 +180,13 @@ exports.getAll = async (req, res, next) => {
                     title: { $regex: filter, $options: "i" },
                 },
                 {
-                    url: { $regex: filter, $options: "i" },
+                    shortDescription: { $regex: filter, $options: "i" },
+                },
+                {
+                    description: { $regex: filter, $options: "i" },
+                },
+                {
+                    status: { $regex: filter, $options: "i" },
                 },
             ];
         }

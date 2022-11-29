@@ -161,7 +161,7 @@ const createAdminUser = async (req, res, nex) => {
 const getUserById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const getRecordById = await db.findById(id, models.User, "role");
+    const getRecordById = await db.findById(id, models.User, "role", "fullName email password role designation");
     return res.status(200).json({
       success: true,
       status: 200,
@@ -190,6 +190,9 @@ const getAdminUsers = async (req, res, next) => {
           fullName: { $regex: filter, $options: "i" },
         },
         {
+          email: { $regex: filter, $options: "i" },
+        },
+        {
           designation: { $regex: filter, $options: "i" },
         }
       ];
@@ -200,8 +203,10 @@ const getAdminUsers = async (req, res, next) => {
         page: page || 1,
         limit: limit || 10,
         populate: [{
-          path: "role"
-        }]
+          path: "role",
+          select: "name"
+        }],
+        select: "fullName email role password designation"
       },
       model: models.User,
       query: query,
@@ -232,6 +237,24 @@ const updateUser = async (req, res) => {
         data: getRecordById,
         message: "Record not found by provided id.",
       });
+    }
+    if (req.body.email) {
+      const checkEmail = await db.findData({
+        req: {},
+        model: models.User,
+        query: {
+          _id: { $ne: id },
+          email: req.body.email
+        }
+      });
+      if (checkEmail) {
+        return res.status(400).json({
+          success: false,
+          status: 400,
+          data: {},
+          message: "Email Already Exists.",
+        });
+      }
     }
     const updateRecord = await db.updateData(
       id,

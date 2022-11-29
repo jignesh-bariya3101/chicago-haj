@@ -4,4 +4,5 @@ exports.default = {
   Role: require("./role"),
   Blog: require("./blog"),
   FAQ: require("./faq"),
+  FAQTypes: require("./faqTypes"),
 };

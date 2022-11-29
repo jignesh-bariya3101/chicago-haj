@@ -6,7 +6,7 @@ exports.create = async (req, res, nex) => {
         req.body.addedBy = req.user._id;
         const createRecord = await db.create(
             req.body,
-            models.FAQ
+            models.FAQTypes
         );
         return res.status(201).json({
             success: true,
@@ -31,13 +31,7 @@ exports.getAll = async (req, res, next) => {
         if (filter) {
             query["$or"] = [
                 {
-                    title: { $regex: filter, $options: "i" },
-                },
-                {
-                    question: { $regex: filter, $options: "i" },
-                },
-                {
-                    answer: { $regex: filter, $options: "i" },
+                    name: { $regex: filter, $options: "i" },
                 }
             ];
         }
@@ -45,13 +39,8 @@ exports.getAll = async (req, res, next) => {
             req: {
                 page: page || 1,
                 limit: limit || 10,
-                populate: [
-                    {
-                        "path": "faqType"
-                    }
-                ]
             },
-            model: models.FAQ,
+            model: models.FAQTypes,
             query: query,
         });
         return res.json({
@@ -73,7 +62,7 @@ exports.getAll = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const getRecordById = await db.findById(id, models.FAQ, "faqType");
+        const getRecordById = await db.findById(id, models.FAQTypes);
         return res.status(200).json({
             success: true,
             status: 200,
@@ -93,7 +82,7 @@ exports.getById = async (req, res, next) => {
 exports.edit = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const getRecordById = await db.findById(id, models.FAQ);
+        const getRecordById = await db.findById(id, models.FAQTypes);
         if (!getRecordById) {
             return res.status(400).json({
                 success: false,
@@ -104,7 +93,7 @@ exports.edit = async (req, res, next) => {
         }
         const updateRecord = await db.updateData(
             id,
-            models.FAQ,
+            models.FAQTypes,
             req.body
         );
         return res.status(200).json({
@@ -126,7 +115,7 @@ exports.edit = async (req, res, next) => {
 exports.remove = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const getRecordById = await db.findById(id, models.FAQ);
+        const getRecordById = await db.findById(id, models.FAQTypes);
         if (!getRecordById) {
             return res.status(400).json({
                 success: false,
@@ -135,7 +124,7 @@ exports.remove = async (req, res, next) => {
                 message: "Record not found by provided id.",
             });
         }
-        const removeRecord = await db.delete(id, models.FAQ);
+        const removeRecord = await db.delete(id, models.FAQTypes);
         return res.status(200).json({
             success: true,
             status: 200,
