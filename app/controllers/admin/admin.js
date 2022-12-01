@@ -98,6 +98,13 @@ const adminLogin = async (req, res, next) => {
           },
           message: "LoggedIn Successfully.",
         });
+      }  else {
+        return res.json({
+          status: 400,
+          success: false,
+          data: null,
+          message: "Invalid Password.",
+        });
       }
     } else {
       return res.json({
