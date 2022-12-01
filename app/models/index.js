@@ -5,4 +5,5 @@ exports.default = {
   Blog: require("./blog"),
   FAQ: require("./faq"),
   FAQTypes: require("./faqTypes"),
+  ImageGallery: require("./imageGallery"),
 };
