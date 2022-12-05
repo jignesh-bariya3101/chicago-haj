@@ -7,5 +7,6 @@ route.use("/blog", require("./blog"));
 route.use("/faq", require("./faq"));
 route.use("/faqTypes", require("./faqTypes"));
 route.use("/imageGallery", require("./imageGallery"));
+route.use("/videoGallery", require("./videoGallery"));
 
 module.exports = route;

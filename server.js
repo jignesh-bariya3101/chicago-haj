@@ -40,7 +40,8 @@ app.get("/test", (req, res) => {
 app.get("/static-data",(req,res) => {
   const resp = {
     blog:`${process.env.BACK_END_URL}/public/blog`,
-    imageGallery:`${process.env.BACK_END_URL}/public/imageGallery`
+    imageGallery:`${process.env.BACK_END_URL}/public/imageGallery`,
+    videoGallery:`${process.env.BACK_END_URL}/public/videoGallery`
   };
   return res.status(200).json({
     success: true,

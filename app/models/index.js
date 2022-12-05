@@ -6,4 +6,5 @@ exports.default = {
   FAQ: require("./faq"),
   FAQTypes: require("./faqTypes"),
   ImageGallery: require("./imageGallery"),
+  VideoGallery: require("./videoGallery"),
 };
