@@ -188,7 +188,7 @@ exports.getAll = async (req, res, next) => {
             req: {
                 page: page || 1,
                 limit: limit || 10,
-                lean:true,
+                lean: true,
                 populate: [
                     {
                         "path": "addedBy",
@@ -280,7 +280,7 @@ exports.edit = async (req, res, next) => {
         var form = new formidable.IncomingForm();
         form.parse(req, async function (err, fields, files) {
             try {
-                const { image } = files;
+                const { video } = files;
                 const updateData = await db.update(getRecordById._id, models.VideoGallery, fields);
                 console.log('updateData :>> ', updateData);
                 if (image) {
@@ -288,90 +288,91 @@ exports.edit = async (req, res, next) => {
                         image.name.indexOf("."),
                         image.name.length
                     );
-                    if (ext === ".jpeg" || ext === ".jpg" || ext === ".JPEG" || ext === ".JPG" || ext === ".png" || ext === ".PNG") {
-                        var NewName = "videoGallery-" + Math.floor((Math.random() * 1000000) + 1);;
-                        if (ext.indexOf("?") > -1) {
-                            ext = ext.substring(0, ext.indexOf("?"));
-                        }
-                        console.log('ext :>> ', ext);
-                        form.uploadDir =
-                            path.join(
-                                __dirname,
-                                "../../../public/videoGallery"
-                            ) +
-                            "/" +
-                            NewName +
-                            ext;
-                        var oldPath = image.path;
-                        var newPath =
-                            path.join(
-                                __dirname,
-                                "../../../public/videoGallery"
-                            ) +
-                            "/" +
-                            NewName +
-                            ext;
-                        console.log('newPath :>> ', newPath);
-                        console.log('oldPath :>> ', oldPath);
-                        var rawData = fs.readFileSync(oldPath);
-                        console.log('rawData :>> ', rawData);
-                        if (getRecordById && getRecordById.image !== null) {
-                            const oldImage = path.join(
-                                __dirname,
-                                "../../../public/videoGallery"
-                            ) +
-                                "/" + getRecordById.image
-                            fs.unlink(oldImage, (err) => {
-                                if (!err) console.log("File Removed Successfully.");
-                            });
-                        }
-                        fs.writeFile(newPath, rawData, async function (err) {
-                            if (!err) {
-                                const updateObject = {
-                                    image: NewName + ext,
-                                };
-                                const updateImage = await db.update(getRecordById._id, models.VideoGallery, updateObject);
-                                console.log("Hello");
-                                console.log('updateImage :>> ', updateImage);
-                                const getGallery = await db.findData({
-                                    req: {},
-                                    model: models.VideoGallery,
-                                    query: {
-                                        _id: getRecordById._id
-                                    },
-                                    options: {
-                                        populate: [
-                                            {
-                                                "path": "addedBy",
-                                                "select": "email fullName"
-                                            },
-                                            {
-                                                "path": "type",
-                                                "select": "name"
-                                            }
-                                        ],
-                                        lean: true
-                                    }
-                                })
-                                getGallery["video"] = `${process.env.BACK_END_URL}/public/videoGallery/${getGallery.video}`;
-                                return res.status(200).json({
-                                    success: true,
-                                    status: 200,
-                                    data: getGallery,
-                                    message: "Record updated successfully.",
-                                });
-                            } else {
-                                console.log("Not Uploaded", err);
-                            }
-                        });
-                    } else {
-                        return res.status(400).json({
-                            success: false,
-                            status: 400,
-                            error: true,
-                            message: "Please select only image file.",
+                    var NewName = "videoGallery-" + Math.floor((Math.random() * 1000000) + 1);;
+                    if (ext.indexOf("?") > -1) {
+                        ext = ext.substring(0, ext.indexOf("?"));
+                    }
+                    console.log('ext :>> ', ext);
+                    form.uploadDir =
+                        path.join(
+                            __dirname,
+                            "../../../public/videoGallery"
+                        ) +
+                        "/" +
+                        NewName +
+                        ext;
+                    var oldPath = image.path;
+                    var newPath =
+                        path.join(
+                            __dirname,
+                            "../../../public/videoGallery"
+                        ) +
+                        "/" +
+                        NewName +
+                        ext;
+                    console.log('newPath :>> ', newPath);
+                    console.log('oldPath :>> ', oldPath);
+                    var rawData = fs.readFileSync(oldPath);
+                    console.log('rawData :>> ', rawData);
+                    if (getRecordById && getRecordById.image !== null) {
+                        const oldImage = path.join(
+                            __dirname,
+                            "../../../public/videoGallery"
+                        ) +
+                            "/" + getRecordById.image
+                        fs.unlink(oldImage, (err) => {
+                            if (!err) console.log("File Removed Successfully.");
                         });
                     }
+                    fs.writeFile(newPath, rawData, async function (err) {
+                        if (!err) {
+                            const updateObject = {
+                                video: NewName + ext,
+                            };
+                            const updateImage = await db.update(getRecordById._id, models.VideoGallery, updateObject);
+                            console.log("Hello");
+                            console.log('updateImage :>> ', updateImage);
+                            const getGallery = await db.findData({
+                                req: {},
+                                model: models.VideoGallery,
+                                query: {
+                                    _id: getRecordById._id
+                                },
+                                options: {
+                                    populate: [
+                                        {
+                                            "path": "addedBy",
+                                            "select": "email fullName"
+                                        },
+                                        {
+                                            "path": "type",
+                                            "select": "name"
+                                        }
+                                    ],
+                                    lean: true
+                                }
+                            })
+                            getGallery["video"] = `${process.env.BACK_END_URL}/public/videoGallery/${getGallery.video}`;
+                            return res.status(200).json({
+                                success: true,
+                                status: 200,
+                                data: getGallery,
+                                message: "Record updated successfully.",
+                            });
+                        } else {
+                            console.log("Not Uploaded", err);
+                        }
+                    });
+                    // if (ext === ".jpeg" || ext === ".jpg" || ext === ".JPEG" || ext === ".JPG" || ext === ".png" || ext === ".PNG") {
+
+                    // } else {
+                    //     return res.status(400).json({
+                    //         success: false,
+                    //         status: 400,
+                    //         error: true,
+                    //         message: "Please select only image file.",
+                    //     });
+                    // }
                 } else {
                     const getGallery = await db.findData({
                         req: {},
