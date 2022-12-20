@@ -37,24 +37,26 @@ app.get("/test", (req, res) => {
   res.send("OK");
 });
 
-app.get("/static-data",(req,res) => {
+app.get("/static-data", (req, res) => {
   const resp = {
-    blog:`${process.env.BACK_END_URL}/public/blog`,
-    imageGallery:`${process.env.BACK_END_URL}/public/imageGallery`,
-    videoGallery:`${process.env.BACK_END_URL}/public/videoGallery`
+    blog: `${process.env.BACK_END_URL}/public/blog`,
+    imageGallery: `${process.env.BACK_END_URL}/public/imageGallery`,
+    videoGallery: `${process.env.BACK_END_URL}/public/videoGallery`
   };
   return res.status(200).json({
     success: true,
     status: 200,
     data: resp,
     message: "Success.",
-});
+  });
 })
 
 /**
  * use cors
  */
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
 
 /**
  * allow cors origin
