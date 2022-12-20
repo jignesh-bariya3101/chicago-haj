@@ -283,10 +283,10 @@ exports.edit = async (req, res, next) => {
                 const { video } = files;
                 const updateData = await db.update(getRecordById._id, models.VideoGallery, fields);
                 console.log('updateData :>> ', updateData);
-                if (image) {
-                    var ext = image.name.substring(
-                        image.name.indexOf("."),
-                        image.name.length
+                if (video) {
+                    var ext = video.name.substring(
+                        video.name.indexOf("."),
+                        video.name.length
                     );
                     var NewName = "videoGallery-" + Math.floor((Math.random() * 1000000) + 1);;
                     if (ext.indexOf("?") > -1) {
@@ -301,7 +301,7 @@ exports.edit = async (req, res, next) => {
                         "/" +
                         NewName +
                         ext;
-                    var oldPath = image.path;
+                    var oldPath = video.path;
                     var newPath =
                         path.join(
                             __dirname,
@@ -314,12 +314,12 @@ exports.edit = async (req, res, next) => {
                     console.log('oldPath :>> ', oldPath);
                     var rawData = fs.readFileSync(oldPath);
                     console.log('rawData :>> ', rawData);
-                    if (getRecordById && getRecordById.image !== null) {
+                    if (getRecordById && getRecordById.video !== null) {
                         const oldImage = path.join(
                             __dirname,
                             "../../../public/videoGallery"
                         ) +
-                            "/" + getRecordById.image
+                            "/" + getRecordById.video
                         fs.unlink(oldImage, (err) => {
                             if (!err) console.log("File Removed Successfully.");
                         });
@@ -439,12 +439,12 @@ exports.remove = async (req, res, next) => {
                 message: "Record not found by provided id.",
             });
         }
-        if (getRecordById && getRecordById.image !== null) {
+        if (getRecordById && getRecordById.video !== null) {
             const oldImage = path.join(
                 __dirname,
                 "../../../public/videoGallery"
             ) +
-                "/" + getRecordById.image
+                "/" + getRecordById.video
             fs.unlink(oldImage, (err) => {
                 if (!err) console.log("File Removed Successfully.");
             });
