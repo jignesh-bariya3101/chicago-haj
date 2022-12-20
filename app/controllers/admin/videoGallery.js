@@ -82,7 +82,7 @@ exports.create = async (req, res, nex) => {
                                         lean: true
                                     }
                                 })
-                                getGallery["videoPath"] = "/public/videoGallery/"
+                                getGallery["video"] = `${process.env.BACK_END_URL}/public/videoGallery/${getGallery.video}`;
                                 return res.status(201).json({
                                     success: true,
                                     status: 201,
@@ -132,7 +132,7 @@ exports.create = async (req, res, nex) => {
                             lean: true
                         }
                     })
-                    getGallery["videoPath"] = "/public/videoGallery/"
+                    getGallery["video"] = `${process.env.BACK_END_URL}/public/videoGallery/${getGallery.video}`;
                     return res.status(201).json({
                         success: true,
                         status: 201,
@@ -188,6 +188,7 @@ exports.getAll = async (req, res, next) => {
             req: {
                 page: page || 1,
                 limit: limit || 10,
+                lean:true,
                 populate: [
                     {
                         "path": "addedBy",
@@ -203,6 +204,10 @@ exports.getAll = async (req, res, next) => {
             model: models.VideoGallery,
             query: query,
         });
+        for (let index = 0; index < getAllRecord.docs.length; index++) {
+            getAllRecord.docs[index].video = `${process.env.BACK_END_URL}/public/videoGallery/${getAllRecord.docs[index].video}`
+        }
+
         return res.json({
             status: 200,
             success: true,
@@ -243,7 +248,7 @@ exports.getById = async (req, res, next) => {
                 lean: true
             }
         })
-        getGallery && getGallery !== null ? getGallery["videoPath"] = "/public/videoGallery/" : "";
+        getGallery && getGallery !== null ? getGallery["video"] = `${process.env.BACK_END_URL}/public/videoGallery/${getGallery.video}` : "";
         return res.status(200).json({
             success: true,
             status: 200,
@@ -328,7 +333,7 @@ exports.edit = async (req, res, next) => {
                                 const updateImage = await db.update(getRecordById._id, models.VideoGallery, updateObject);
                                 console.log("Hello");
                                 console.log('updateImage :>> ', updateImage);
-                                const getBlog = await db.findData({
+                                const getGallery = await db.findData({
                                     req: {},
                                     model: models.VideoGallery,
                                     query: {
@@ -348,11 +353,11 @@ exports.edit = async (req, res, next) => {
                                         lean: true
                                     }
                                 })
-                                getBlog["videoPath"] = "/public/videoGallery/"
+                                getGallery["video"] = `${process.env.BACK_END_URL}/public/videoGallery/${getGallery.video}`;
                                 return res.status(200).json({
                                     success: true,
                                     status: 200,
-                                    data: getBlog,
+                                    data: getGallery,
                                     message: "Record updated successfully.",
                                 });
                             } else {
@@ -368,7 +373,7 @@ exports.edit = async (req, res, next) => {
                         });
                     }
                 } else {
-                    const getBlog = await db.findData({
+                    const getGallery = await db.findData({
                         req: {},
                         model: models.VideoGallery,
                         query: {
@@ -382,11 +387,11 @@ exports.edit = async (req, res, next) => {
                             lean: true
                         }
                     })
-                    getBlog["imagePath"] = "/public/videoGallery/"
+                    getGallery["video"] = `${process.env.BACK_END_URL}/public/videoGallery/${getGallery.video}`;
                     return res.status(200).json({
                         success: true,
                         status: 200,
-                        data: getBlog,
+                        data: getGallery,
                         message: "Record updated successfully.",
                     });
                 }

@@ -28,7 +28,7 @@ exports.create = async (req, res, nex) => {
                         image.name.indexOf("."),
                         image.name.length
                     );
-                    if (ext === ".jpeg" || ext === ".jpg" || ext === ".JPEG" || ext === ".JPG" || ext === ".png" || ext === ".PNG") {
+                    if (ext === ".jpeg" || ext === ".jpg" || ext === ".JPEG" || ext === ".JPG" || ext === ".png" || ext === ".PNG" || ext === ".avif") {
                         var NewName = "blog-" + Math.floor((Math.random() * 1000000) + 1);;
                         if (ext.indexOf("?") > -1) {
                             ext = ext.substring(0, ext.indexOf("?"));
@@ -77,7 +77,7 @@ exports.create = async (req, res, nex) => {
                                             lean: true
                                         }
                                     })
-                                    getBlog["imagePath"] = "/public/blog/"
+                                    getBlog["image"] = `${process.env.BACK_END_URL}/public/blog/${getBlog.image}`
                                     return res.status(201).json({
                                         success: true,
                                         status: 201,
@@ -129,7 +129,7 @@ exports.create = async (req, res, nex) => {
                             lean: true
                         }
                     })
-                    getBlog["imagePath"] = "/public/blog/"
+                    getBlog["image"] = `${process.env.BACK_END_URL}/public/blog/${getBlog.image}`
                     return res.status(201).json({
                         success: true,
                         status: 201,
@@ -194,10 +194,14 @@ exports.getAll = async (req, res, next) => {
             req: {
                 page: page || 1,
                 limit: limit || 10,
+                lean:true
             },
             model: models.Blog,
             query: query,
         });
+        for (let index = 0; index < getAllRecord.docs.length; index++) {
+            getAllRecord.docs[index].image = `${process.env.BACK_END_URL}/public/blog/${getAllRecord.docs[index].image}`
+        }
         return res.json({
             status: 200,
             success: true,
@@ -231,7 +235,7 @@ exports.getById = async (req, res, next) => {
                 lean: true
             }
         })
-        getBlog && getBlog !== null ? getBlog["imagePath"] = "/public/blog/" : "";
+        getBlog && getBlog !== null ? getBlog["image"] = `${process.env.BACK_END_URL}/public/blog/${getBlog.image}` : "";
         return res.status(200).json({
             success: true,
             status: 200,
@@ -330,7 +334,7 @@ exports.edit = async (req, res, next) => {
                                         lean: true
                                     }
                                 })
-                                getBlog["imagePath"] = "/public/blog/"
+                                getBlog["image"] = `${process.env.BACK_END_URL}/public/blog/${getBlog.image}`
                                 return res.status(200).json({
                                     success: true,
                                     status: 200,
@@ -364,7 +368,7 @@ exports.edit = async (req, res, next) => {
                             lean: true
                         }
                     })
-                    getBlog["imagePath"] = "/public/blog/"
+                    getBlog["image"] = `${process.env.BACK_END_URL}/public/blog/${getBlog.image}`
                     return res.status(200).json({
                         success: true,
                         status: 200,

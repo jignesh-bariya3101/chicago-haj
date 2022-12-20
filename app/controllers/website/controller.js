@@ -29,10 +29,14 @@ exports.getAllBlog = async (req, res, next) => {
             req: {
                 page: page || 1,
                 limit: limit || 10,
+                lean:true,
             },
             model: models.Blog,
             query: query,
         });
+        for (let index = 0; index < getAllRecord.docs.length; index++) {
+            getAllRecord.docs[index].image = `${process.env.BACK_END_URL}/public/blog/${getAllRecord.docs[index].image}`
+        }
         return res.json({
             status: 200,
             success: true,
@@ -152,6 +156,7 @@ exports.getAllImageGallery = async (req, res, next) => {
             req: {
                 page: page || 1,
                 limit: limit || 10,
+                lean:true,
                 populate: [
                     {
                         "path": "addedBy",
@@ -167,6 +172,9 @@ exports.getAllImageGallery = async (req, res, next) => {
             model: models.ImageGallery,
             query: query,
         });
+        for (let index = 0; index < getAllRecord.docs.length; index++) {
+            getAllRecord.docs[index].image = `${process.env.BACK_END_URL}/public/imageGallery/${getAllRecord.docs[index].image}`
+        }
         return res.json({
             status: 200,
             success: true,
@@ -198,6 +206,7 @@ exports.getAllVideoGallery = async (req, res, next) => {
             req: {
                 page: page || 1,
                 limit: limit || 10,
+                lean:true,
                 populate: [
                     {
                         "path": "addedBy",
@@ -213,6 +222,9 @@ exports.getAllVideoGallery = async (req, res, next) => {
             model: models.VideoGallery,
             query: query,
         });
+        for (let index = 0; index < getAllRecord.docs.length; index++) {
+            getAllRecord.docs[index].image = `${process.env.BACK_END_URL}/public/videoGallery/${getAllRecord.docs[index].video}`
+        }
         return res.json({
             status: 200,
             success: true,

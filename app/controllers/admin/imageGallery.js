@@ -83,7 +83,7 @@ exports.create = async (req, res, nex) => {
                                             lean: true
                                         }
                                     })
-                                    getGallery["imagePath"] = "/public/imageGallery/"
+                                    getGallery["image"] = `${process.env.BACK_END_URL}/public/imageGallery/${getGallery.image}`;
                                     return res.status(201).json({
                                         success: true,
                                         status: 201,
@@ -142,7 +142,8 @@ exports.create = async (req, res, nex) => {
                             lean: true
                         }
                     })
-                    getGallery["imagePath"] = "/public/imageGallery/"
+                    // getGallery["imagePath"] = "/public/imageGallery/"
+                    getGallery["image"] = `${process.env.BACK_END_URL}/public/imageGallery/${getGallery.image}`;
                     return res.status(201).json({
                         success: true,
                         status: 201,
@@ -209,10 +210,16 @@ exports.getAll = async (req, res, next) => {
                     },
 
                 ],
+                lean:true
             },
             model: models.ImageGallery,
             query: query,
         });
+
+        for (let index = 0; index < getAllRecord.docs.length; index++) {
+            getAllRecord.docs[index].image = `${process.env.BACK_END_URL}/public/imageGallery/${getAllRecord.docs[index].image}`
+        }
+
         return res.json({
             status: 200,
             success: true,
@@ -253,7 +260,7 @@ exports.getById = async (req, res, next) => {
                 lean: true
             }
         })
-        getGallery && getGallery !== null ? getGallery["imagePath"] = "/public/imageGallery/" : "";
+        getGallery && getGallery !== null ? getGallery["image"] = `${process.env.BACK_END_URL}/public/imageGallery/${getGallery.image}`: "";
         return res.status(200).json({
             success: true,
             status: 200,
@@ -338,7 +345,7 @@ exports.edit = async (req, res, next) => {
                                 const updateImage = await db.update(getRecordById._id, models.ImageGallery, updateObject);
                                 console.log("Hello");
                                 console.log('updateImage :>> ', updateImage);
-                                const getBlog = await db.findData({
+                                const getGallery = await db.findData({
                                     req: {},
                                     model: models.ImageGallery,
                                     query: {
@@ -358,11 +365,11 @@ exports.edit = async (req, res, next) => {
                                         lean: true
                                     }
                                 })
-                                getBlog["imagePath"] = "/public/imageGallery/"
+                                getGallery["image"] = `${process.env.BACK_END_URL}/public/imageGallery/${getGallery.image}`;
                                 return res.status(200).json({
                                     success: true,
                                     status: 200,
-                                    data: getBlog,
+                                    data: getGallery,
                                     message: "Record updated successfully.",
                                 });
                             } else {
@@ -378,7 +385,7 @@ exports.edit = async (req, res, next) => {
                         });
                     }
                 } else {
-                    const getBlog = await db.findData({
+                    const getGallery = await db.findData({
                         req: {},
                         model: models.ImageGallery,
                         query: {
@@ -392,11 +399,11 @@ exports.edit = async (req, res, next) => {
                             lean: true
                         }
                     })
-                    getBlog["imagePath"] = "/public/imageGallery/"
+                    getGallery["image"] = `${process.env.BACK_END_URL}/public/imageGallery/${getGallery.image}`;
                     return res.status(200).json({
                         success: true,
                         status: 200,
-                        data: getBlog,
+                        data: getGallery,
                         message: "Record updated successfully.",
                     });
                 }
