@@ -7,4 +7,6 @@ exports.default = {
   FAQTypes: require("./faqTypes"),
   ImageGallery: require("./imageGallery"),
   VideoGallery: require("./videoGallery"),
+  VideoGalleryCategory: require("./videoGalleryCategory"),
+  Airport: require("./airport"),
 };

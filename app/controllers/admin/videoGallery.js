@@ -9,13 +9,14 @@ exports.create = async (req, res, nex) => {
     try {
         var form = new formidable.IncomingForm();
         form.parse(req, async function (err, fields, files) {
-            const { description, type } = fields;
+            const { description, type, videoCategoryId } = fields;
             const { video } = files;
 
             try {
                 const createObject = {
                     description,
                     type,
+                    videoCategoryId,
                     addedBy: req.user._id,
                 }
                 const createRecord = await db.create(
@@ -77,6 +78,10 @@ exports.create = async (req, res, nex) => {
                                                 "path": "type",
                                                 "select": "name"
                                             },
+                                            {
+                                                "path": "videoCategoryId",
+                                                "select": "name"
+                                            },
 
                                         ],
                                         lean: true
@@ -125,6 +130,10 @@ exports.create = async (req, res, nex) => {
                                 },
                                 {
                                     "path": "type",
+                                    "select": "name"
+                                },
+                                {
+                                    "path": "videoCategoryId",
                                     "select": "name"
                                 },
 
@@ -198,6 +207,10 @@ exports.getAll = async (req, res, next) => {
                         "path": "type",
                         "select": "name"
                     },
+                    {
+                        "path": "videoCategoryId",
+                        "select": "name"
+                    },
 
                 ],
             },
@@ -242,6 +255,10 @@ exports.getById = async (req, res, next) => {
                     },
                     {
                         "path": "type",
+                        "select": "name"
+                    },
+                    {
+                        "path": "videoCategoryId",
                         "select": "name"
                     },
                 ],
@@ -347,7 +364,11 @@ exports.edit = async (req, res, next) => {
                                         {
                                             "path": "type",
                                             "select": "name"
-                                        }
+                                        },
+                                        {
+                                            "path": "videoCategoryId",
+                                            "select": "name"
+                                        },
                                     ],
                                     lean: true
                                 }
@@ -381,10 +402,16 @@ exports.edit = async (req, res, next) => {
                             _id: getRecordById._id
                         },
                         options: {
-                            populate: {
+                            populate: [{
                                 "path": "addedBy",
                                 "select": "email fullName"
                             },
+                            {
+                                "path": "videoCategoryId",
+                                "select": "name"
+                            },
+                            ],
+
                             lean: true
                         }
                     })

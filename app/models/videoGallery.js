@@ -16,6 +16,7 @@ const VideoGallery = new mongoose.Schema(
         },
         type: { type: mongoose.Schema.Types.ObjectId, ref: "FaqType", index: true },
         addedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", index: true },
+        videoCategoryId: { type: mongoose.Schema.Types.ObjectId, ref: "VideoGalleryCategory", index: true },
     },
     {
         versionKey: false,

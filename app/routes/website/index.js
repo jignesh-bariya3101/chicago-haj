@@ -10,6 +10,8 @@ route.get("/website/getAllFaq", controller.getAllFaq);
 route.get("/website/getAllFaqType", controller.getAllFaqType);
 route.get("/website/getAllImageGallery", controller.getAllImageGallery);
 route.get("/website/getAllVideoGallery", controller.getAllVideoGallery);
+route.get("/website/getCategoryViseVideoGallery", controller.getAllCategoryVideoGallery);
+route.get("/website/getAllAirports", controller.getAllAirports);
 
 
 module.exports = route;
